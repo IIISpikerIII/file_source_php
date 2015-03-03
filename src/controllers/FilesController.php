@@ -2,9 +2,16 @@
 
 class FilesController extends Controller {
 
-    public function storage(){
+    protected $protected_method = array(
+        'storage',
+        'upload',
+        'remove'
+    );
+
+    protected function storage(){
+
         $model = new Files();
-        $usr_id = User::isAuth('id');
+        $usr_id = $this->usr_id;
 
         // load files
         if(isset($_FILES['Files'])) {
@@ -27,7 +34,7 @@ class FilesController extends Controller {
 
                     $model_files->save();
                 } else
-                    $model->errors[] = $err[0];
+                    $model->errors = $err;
             }
         }
 
@@ -44,13 +51,13 @@ class FilesController extends Controller {
 
     public function upload()
     {
-        $usr_id = User::isAuth('id');
+        $usr_id = $this->usr_id;
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
             $file = Connect::db()->select(Files::$table,'id = ' . $id . ' AND id_user = ' . $usr_id);
 
             if (empty($file))
-                return;
+                throw new FSException('403', 'Файл не существует либо попытка скачать чужой файл');
 
             $file = end($file);
             FileHelper::upload_file($file['file']);
@@ -59,13 +66,14 @@ class FilesController extends Controller {
 
     public function remove()
     {
-        $usr_id = User::isAuth('id');
+        $usr_id = $this->usr_id;
+
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
             $file = Connect::db()->select(Files::$table,'id = ' . $id . ' AND id_user = ' . $usr_id);
 
             if (empty($file))
-                return;
+                throw new FSException('403', 'Файл не существует либо попытка удалить чужой файл');
 
             $file = end($file);
             Connect::db()->delete(Files::$table,'id = ' . $id . ' AND id_user = ' . $usr_id);

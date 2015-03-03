@@ -16,7 +16,7 @@ class User extends Model {
     public $hash;
 
     public $attributes = array(
-        'login'     => array('self'=>true,  'valid' => array('maxlength' => '3', 'required'), 'label' => 'Логин'),
+        'login'     => array('self'=>true,  'valid' => array('maxlength' => '3', 'required', 'unique'=>__CLASS__), 'label' => 'Логин'),
         'pass'      => array('self'=>true,  'valid' => array( 'required'), 'label' => 'Пароль'),
         'f_name'    => array('self'=>true,  'valid' => array('required'), 'label' => 'Имя'),
         's_name'    => array('self'=>true,  'valid' => array('required'), 'label' => 'Фамилия'),
@@ -50,8 +50,9 @@ class User extends Model {
 
     public static function logout() {
 
-        unset($_COOKIE['hash_fs']);
-        unset($_COOKIE['id_fs']);
+        Connect::db()->update(User::$table, array("hash" => ""), User::isAuth('id'));
+        setcookie($_COOKIE['hash_fs'],"");
+        setcookie($_COOKIE['id_fs'], "");
 
     }
 
@@ -61,7 +62,7 @@ class User extends Model {
 
             $model = Connect::db()->select(User::$table, "id=" . $_COOKIE['id_fs'] . " AND hash = '" . $_COOKIE['hash_fs'] . "'");
 
-            if ($model !== null) {
+            if (!empty($model)) {
                 return $attr === true? true : end($model)[$attr];
             }
         }
@@ -83,7 +84,8 @@ class User extends Model {
 
     public static function generatePass($pass){
 
-        return md5(md5($pass).Connect::config('salt'));
+        $pass = trim($pass);
+        return empty($pass)? $pass: md5(md5($pass).Connect::config('salt'));
     }
 
     public static function checkPass($usr_pass, $org_pass){

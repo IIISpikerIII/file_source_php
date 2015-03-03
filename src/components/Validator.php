@@ -22,6 +22,16 @@ class Validator {
         return true;
     }
 
+    public function unique($attr, $val, $class){
+
+        $model = Connect::db()->select($class::$table, $attr.' = "'.$val.'"');
+
+        if(sizeof($model) > 0)
+            return $this->addError($attr, "Значение должно быть уникальным");
+
+        return true;
+    }
+
     public function required($attr, $val){
 
         $val = trim($val);

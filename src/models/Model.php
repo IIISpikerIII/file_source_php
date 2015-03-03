@@ -5,6 +5,7 @@ abstract class Model {
     public static $table;
     public $attributes = array();
     public $errors = array();
+    public $service;
 
     public function setAttributes($params = array()) {
 
@@ -53,12 +54,15 @@ abstract class Model {
                     else
                         $error = $this->validateAttribute($key, $this->$key, $id, $validator);
 
-                    if($error !== true) $err[] = $error;
+                    if($error !== true) $err[$key][] = array_shift($error);
                 }
             }
         }
 
-        $err = sizeof($err) > 0? $err : true;
+        if( sizeof($err) > 0)
+            $this->errors = $err;
+        else
+            $err = true;
 
         return $err;
     }

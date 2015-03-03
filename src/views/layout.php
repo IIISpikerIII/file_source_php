@@ -14,6 +14,7 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <ul class="nav navbar-nav">
+                <li><a href="/?cont=user&act=profile">ПРОФИЛЬ</a></li>
                 <li><a href="/?cont=files&act=storage">ХРАНИЛИЩЕ</a></li>
                 <li><a href="/?cont=user&act=registration">РЕГИСТРАЦИЯ</a></li>
                 <li><a href="/?cont=user&act=login">ВХОД</a></li>

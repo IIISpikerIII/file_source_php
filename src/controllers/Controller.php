@@ -2,6 +2,32 @@
 
 abstract class Controller {
 
+    protected $protected_method = array();
+    protected $usr_id;
+
+    public function __call($method, array $params) {
+
+        if(method_exists($this, $method)) {
+
+            if($this->checkAccess($method))
+                call_user_func(array($this, $method), $params);
+            else
+                header('Location: /?cont=user&act=login');
+        } else
+            throw new FSException('not found', 404);
+    }
+
+    public function checkAccess($method) {
+
+        if(in_array($method, $this->protected_method)){
+
+            $this->usr_id = User::isAuth('id');
+            if($this->usr_id === false) return false;
+        }
+
+        return true;
+    }
+
     public function render($file, $params = array()) {
 
         $tmpl= BASE_PATH.'/views/layout.php';
@@ -14,7 +40,7 @@ abstract class Controller {
         extract($params);
 
         if (!is_file($file) || !is_file($tmpl)) {
-            echo 'No file';
+            throw new FSException('404', 'Шаблон не найден');
 
         } else {
 

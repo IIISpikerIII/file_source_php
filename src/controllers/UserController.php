@@ -2,7 +2,11 @@
 
 class UserController extends Controller {
 
-    public function registration(){
+    protected $protected_method = array(
+        'profile'
+    );
+
+    protected function registration(){
 
         $model = new User();
 
@@ -14,17 +18,44 @@ class UserController extends Controller {
             $model->pass = User::generatePass($model->pass);
 
             if($model->save())
-                echo 'YES';
-            else
-                print_r($model);
+                header('Location: /?cont=user&act=login');
         }
 
         $this->render('registration', array (
             'model' => $model,
+            'edit'  => 0
         ));
     }
 
-    public function login(){
+    protected function profile(){
+
+        $usr_id = $this->usr_id;
+        $data = Connect::db()->select(User::$table, 'id = '.$usr_id);
+
+        $model = new User;
+        $model->setAttributes(end($data));
+
+        if(isset($_POST['User']) && sizeof($model) > 0){
+
+            $attr = $_POST['User'];
+            $attr['b_date'] = date('Y-m-d H:i:s', strtotime($attr['b_date']));
+            $attr['pass'] = User::generatePass($attr['pass']);
+
+            $model->setAttributes($attr);
+
+            if($model->validate() === true){
+                if(Connect::db()->update(User::$table, $attr, 'id = '.$usr_id))
+                    header('Location: /?cont=user&act=profile');
+            }
+        }
+
+        $this->render('registration', array (
+            'model' => $model,
+            'edit'  => 1
+        ));
+    }
+
+    protected function login() {
 
         $model = new User();
         if(isset($_POST['User'])){
@@ -38,8 +69,13 @@ class UserController extends Controller {
         ));
     }
 
-    public function logout(){
+    protected function logout(){
 
         User::logout();
+        header('Location: /?cont=user&act=index');
+    }
+
+    protected function index() {
+        $this->render('index');
     }
 }
