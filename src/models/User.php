@@ -28,6 +28,10 @@ class User extends Model {
         'hash',
     );
 
+    /**
+     * authenticate user
+     * @return bool
+     */
     public function authenticate() {
 
         $model = Connect::db()->select(User::$table, "LOWER(login)=".$this->login.'' );
@@ -48,6 +52,9 @@ class User extends Model {
         return true;
     }
 
+    /**
+     * logout user
+     */
     public static function logout() {
 
         Connect::db()->update(User::$table, array("hash" => ""), User::isAuth('id'));
@@ -56,6 +63,11 @@ class User extends Model {
 
     }
 
+    /**
+     * check auth user
+     * @param bool $attr
+     * @return bool
+     */
     public static function isAuth($attr = true) {
 
         if (isset($_COOKIE['id_fs']) and isset($_COOKIE['hash_fs'])) {
@@ -70,6 +82,11 @@ class User extends Model {
         return false;
     }
 
+    /**
+     * generate random string
+     * @param int $count
+     * @return string
+     */
     public static function generateRand($count=16){
 
         $chars = 'qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP';
@@ -82,12 +99,23 @@ class User extends Model {
         return $pass;
     }
 
+    /**
+     * generate password
+     * @param $pass
+     * @return string
+     */
     public static function generatePass($pass){
 
         $pass = trim($pass);
         return empty($pass)? $pass: md5(md5($pass).Connect::config('salt'));
     }
 
+    /**
+     * check password
+     * @param $usr_pass
+     * @param $org_pass
+     * @return bool
+     */
     public static function checkPass($usr_pass, $org_pass){
 
         $usr_pass = User::generatePass($usr_pass);

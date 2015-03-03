@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * Class Controller
+ * main abstract controller class
+ */
 abstract class Controller {
 
+    //list protected method
     protected $protected_method = array();
     protected $usr_id;
 
+    /**
+     * controll access
+     * @param $method
+     * @param array $params
+     */
     public function __call($method, array $params) {
 
         if(method_exists($this, $method)) {
@@ -14,9 +24,15 @@ abstract class Controller {
             else
                 header('Location: /?cont=user&act=login');
         } else
-            throw new FSException('not found', 404);
+            header('Location: /?cont=user&act=error');
+
     }
 
+    /**
+     * check user access
+     * @param $method
+     * @return bool
+     */
     public function checkAccess($method) {
 
         if(in_array($method, $this->protected_method)){
@@ -28,6 +44,12 @@ abstract class Controller {
         return true;
     }
 
+    /**
+     * render template
+     * @param $file
+     * @param array $params
+     * @throws FSException
+     */
     public function render($file, $params = array()) {
 
         $tmpl= BASE_PATH.'/views/layout.php';

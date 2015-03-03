@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Model
+ * main model abstract class
+ */
 abstract class Model {
 
     public static $table;
@@ -7,6 +11,10 @@ abstract class Model {
     public $errors = array();
     public $service;
 
+    /**
+     * Set attribute to model
+     * @param array $params
+     */
     public function setAttributes($params = array()) {
 
         foreach($this->attributes as $key => $val) {
@@ -16,6 +24,10 @@ abstract class Model {
         }
     }
 
+    /**
+     * save and validate model
+     * @return bool
+     */
     public function save() {
 
         // validate model before save
@@ -36,6 +48,11 @@ abstract class Model {
         return (Connect::db()->insert(static::$table, $attr) === 1)? true: false;
     }
 
+    /**
+     * Validate model
+     * @param bool $attr
+     * @return array|bool
+     */
     public function validate($attr = false) {
 
         $attr = $attr !== false? array($attr => $this->attributes[$attr]): $this->attributes;
@@ -67,6 +84,14 @@ abstract class Model {
         return $err;
     }
 
+    /**
+     * Validate attribute model
+     * @param $key
+     * @param $val
+     * @param $validator
+     * @param null $param
+     * @return bool|mixed
+     */
     public function validateAttribute($key, $val, $validator, $param = null) {
 
         $valid = new Validator();
@@ -78,6 +103,11 @@ abstract class Model {
         return $answer;
     }
 
+    /**
+     * get label attribute model
+     * @param $attr
+     * @return null
+     */
     public function label($attr) {
 
         $answer = null;
@@ -92,6 +122,10 @@ abstract class Model {
         return $answer;
     }
 
+    /**
+     * formating error array
+     * @return string
+     */
     public function formatError(){
 
         $out = '';

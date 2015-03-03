@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Validator
+ */
 class Validator {
 
     public function email($attr, $val){

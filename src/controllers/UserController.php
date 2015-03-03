@@ -82,4 +82,8 @@ class UserController extends Controller {
     protected function index() {
         $this->render('index');
     }
+
+    protected function error() {
+        $this->render('404');
+    }
 }

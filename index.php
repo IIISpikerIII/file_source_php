@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-
 defined('BASE_PATH') or define('BASE_PATH',__DIR__.'/src');
 defined('FILES_PATH') or define('FILES_PATH',__DIR__.'/files');
 defined('CONF_PATH') or define('CONF_PATH',BASE_PATH.'/conf');
@@ -10,21 +7,8 @@ defined('CONF_PATH') or define('CONF_PATH',BASE_PATH.'/conf');
 include(BASE_PATH."/conf/connect.php");
 include(BASE_PATH."/conf/autoloader.php");
 
-
-//protected static $instance = null;
-//
-//public static function getInstance()
-//{
-//    if (!isset(static::$instance)) self::$instance = new db($dsn, $user="", $passwd="");
-//    return static::$instance;
-//}
-
-$db = Connect::db();
-//$db = new db("mysql:host=localhost;dbname=pftest", "root", "123");
-
-
-$cont = $_GET['cont'];
-$act = $_GET['act'];
+$cont = isset($_GET['cont'])? $_GET['cont']: 'user';
+$act = isset($_GET['act'])? $_GET['act']: 'index';
 
 $model = $cont.'Controller';
 $model = new $model;
