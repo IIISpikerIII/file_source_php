@@ -47,7 +47,7 @@ class FileHelper
         $filename = FileHelper::getRandomFileName(FileHelper::ab_filespath().$folder.'/', '');
         $filename = $folder.'/'.$filename;
 
-        if(file_put_contents(FileHelper::ab_filespath().$filename, $file))
+        if(copy( $file, FileHelper::ab_filespath().$filename))
             $answer = $filename;
 
         return $answer;
@@ -61,7 +61,13 @@ class FileHelper
     public static function remove_file($file)
     {
         $path = FileHelper::ab_filespath().$file;
-        return unlink($path);
+
+        if (!file_exists($path))
+            unlink($path);
+        else
+            return false;
+
+        return true;
     }
 
     /**

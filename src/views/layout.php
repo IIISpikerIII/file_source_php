@@ -8,17 +8,16 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 
-<?User::isAuth()?>
 <body>
 
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <ul class="nav navbar-nav">
-                <li><a href="/?cont=user&act=profile">ПРОФИЛЬ</a></li>
-                <li><a href="/?cont=files&act=storage">ХРАНИЛИЩЕ</a></li>
-                <li><a href="/?cont=user&act=registration">РЕГИСТРАЦИЯ</a></li>
-                <li><a href="/?cont=user&act=login">ВХОД</a></li>
-                <li><a href="/?cont=user&act=logout">ВЫХОД</a></li>
+                <li><a href="/?cont=user&act=profile" class="<?if(empty($this->usr_id)) echo 'hidden';?>">ПРОФИЛЬ</a></li>
+                <li><a href="/?cont=files&act=storage" class="<?if(empty($this->usr_id)) echo 'hidden';?>">ХРАНИЛИЩЕ</a></li>
+                <li><a href="/?cont=user&act=registration" class="<?if(!empty($this->usr_id)) echo 'hidden';?>">РЕГИСТРАЦИЯ</a></li>
+                <li><a href="/?cont=user&act=login" class="<?if(!empty($this->usr_id)) echo 'hidden';?>">ВХОД</a></li>
+                <li><a href="/?cont=user&act=logout" class="<?if(empty($this->usr_id)) echo 'hidden';?>">ВЫХОД</a></li>
             </ul>
         </div>
     </nav>

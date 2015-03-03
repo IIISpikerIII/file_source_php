@@ -91,4 +91,15 @@ abstract class Model {
         $answer = $this->attributes[$attr]['label'];
         return $answer;
     }
+
+    public function formatError(){
+
+        $out = '';
+        foreach($this->errors as $key=>$val) {
+            $out.=$this->label($key).'<br/>';
+            $out.= implode('<br/>', $val).'<br/>';
+        }
+
+        return $out;
+    }
 }

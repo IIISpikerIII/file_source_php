@@ -1,0 +1,7 @@
+#<Files "*{32}">
+#deny from all
+#</Files>
+<FilesMatch "*">
+ Order Allow,Deny
+ Deny from all
+ </FilesMatch>

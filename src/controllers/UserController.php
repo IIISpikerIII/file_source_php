@@ -63,7 +63,9 @@ class UserController extends Controller {
         if(isset($_POST['User'])){
 
             $model->setAttributes($_POST['User']);
-            $model->authenticate();
+
+            if($model->authenticate())
+                header('Location: /?cont=user&act=profile');
         }
 
         $this->render('login', array (
