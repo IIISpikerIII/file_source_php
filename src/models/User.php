@@ -55,14 +55,14 @@ class User extends Model {
 
     }
 
-    public static function isAuth() {
+    public static function isAuth($attr = true) {
 
         if (isset($_COOKIE['id_fs']) and isset($_COOKIE['hash_fs'])) {
 
             $model = Connect::db()->select(User::$table, "id=" . $_COOKIE['id_fs'] . " AND hash = '" . $_COOKIE['hash_fs'] . "'");
 
             if ($model !== null) {
-                return true;
+                return $attr === true? true : end($model)[$attr];
             }
         }
 

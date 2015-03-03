@@ -25,7 +25,6 @@ abstract class Model {
             return false;
         }
 
-
         $attr = array();
         foreach($this->attributes as $key => $val) {
 
@@ -36,13 +35,13 @@ abstract class Model {
         return (Connect::db()->insert(static::$table, $attr) === 1)? true: false;
     }
 
-    public function validate($attr = array()) {
+    public function validate($attr = false) {
 
-        $attr = array();
+        $attr = $attr !== false? array($attr => $this->attributes[$attr]): $this->attributes;
         $err = array();
 
         //attributes model
-        foreach($this->attributes as $key => $val) {
+        foreach($attr as $key => $val) {
 
             if(isset($val['valid']) && is_array($val['valid'])) {
 

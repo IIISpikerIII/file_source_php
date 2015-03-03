@@ -32,6 +32,16 @@ class Validator {
         return true;
     }
 
+    public function filesize($attr, $val, $size){
+
+       $filesize = filesize($val);
+
+        if($filesize > $size)
+            return $this->addError($attr, "Максимальный размер файла ".$size);
+
+        return true;
+    }
+
     private function validateReg($val, $reg){
 
         if(preg_match($reg, $val) === 1)

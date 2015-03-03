@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 defined('BASE_PATH') or define('BASE_PATH',__DIR__.'/src');
+defined('FILES_PATH') or define('FILES_PATH',__DIR__.'/files');
 defined('CONF_PATH') or define('CONF_PATH',BASE_PATH.'/conf');
 
 include(BASE_PATH."/conf/connect.php");
