@@ -22,6 +22,16 @@ class Validator {
         return true;
     }
 
+    public function required($attr, $val){
+
+        $val = trim($val);
+
+        if(empty($val))
+            return $this->addError($attr, "Поле обязательно для заполнения");
+
+        return true;
+    }
+
     private function validateReg($val, $reg){
 
         if(preg_match($reg, $val) === 1)

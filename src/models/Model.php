@@ -2,7 +2,7 @@
 
 abstract class Model {
 
-    public $table;
+    public static $table;
     public $attributes = array();
     public $errors = array();
 
@@ -25,6 +25,7 @@ abstract class Model {
             return false;
         }
 
+
         $attr = array();
         foreach($this->attributes as $key => $val) {
 
@@ -32,8 +33,7 @@ abstract class Model {
                 $attr[$key] = $this->$key;
         }
 
-
-        return (Connect::db()->insert($this->table, $attr) === 1)? true: false;
+        return (Connect::db()->insert(static::$table, $attr) === 1)? true: false;
     }
 
     public function validate($attr = array()) {
@@ -59,7 +59,7 @@ abstract class Model {
             }
         }
 
-        $err = sizeof($err > 0)? $err : true;
+        $err = sizeof($err) > 0? $err : true;
 
         return $err;
     }
@@ -72,6 +72,20 @@ abstract class Model {
         if(method_exists($valid, $validator))
             $answer = call_user_func_array(array($valid, $validator), array($key, $val, $param));
 
+        return $answer;
+    }
+
+    public function label($attr) {
+
+        $answer = null;
+        if(!isset($this->attributes[$attr]))
+            return $answer;
+
+        $answer = $attr;
+        if(!isset($this->attributes[$attr]['label']))
+            return $answer;
+
+        $answer = $this->attributes[$attr]['label'];
         return $answer;
     }
 }
