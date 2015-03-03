@@ -29,13 +29,35 @@ abstract class Model {
     public function validate($attr = array()) {
 
         $attr = array();
+        $err = array();
+
+        //attributes model
         foreach($this->attributes as $key => $val) {
 
-            if(!empty($this->$key))
-                $attr[$key] = $this->$key;
+            if(isset($val['valid']) && is_array($val['valid'])) {
+
+                // validators model
+                foreach($val['valid'] as $validator) {
+
+                    if($error = $this->validateAttribute($key, $validator) !== true)
+                        $err[] = $error;
+                }
+            }
         }
 
-        return Connect::db()->insert($this->table, $attr);
+        $err = sizeof($err > 0)? $err : true;
+
+        return $err;
     }
 
+    public function validateAttribute($attr, $validator) {
+
+        $valid = new Validator();
+        $answer = true;
+
+        if(method_exists($valid, $validator))
+            $answer = $valid->$attr;
+
+        return $answer;
+    }
 }
