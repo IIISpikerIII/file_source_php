@@ -44,8 +44,10 @@ class UserController extends Controller {
             $model->setAttributes($attr);
 
             if($model->validate() === true){
-                if(Connect::db()->update(User::$table, $attr, 'id = '.$usr_id))
+                if(Connect::db()->update(User::$table, $attr, 'id = '.$usr_id)) {
+                    Logs::logChange(end($data), $attr);
                     header('Location: /?cont=user&act=profile');
+                }
             }
         }
 

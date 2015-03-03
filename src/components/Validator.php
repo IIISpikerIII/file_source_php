@@ -26,7 +26,7 @@ class Validator {
 
         $model = Connect::db()->select($class::$table, $attr.' = "'.$val.'"');
 
-        if(sizeof($model) > 0)
+        if(sizeof($model) > 1)
             return $this->addError($attr, "Значение должно быть уникальным");
 
         return true;

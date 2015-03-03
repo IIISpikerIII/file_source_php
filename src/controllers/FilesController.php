@@ -33,6 +33,7 @@ class FilesController extends Controller {
                     $model_files->created = date('Y-m-d H:i:s',time());
 
                     $model_files->save();
+                    Logs::setLog('files', $model_files->name, $usr_id);
                 } else
                     $model->errors = $err;
             }
