@@ -15,6 +15,8 @@ class UserController extends Controller {
                 echo 'YES';
         }
 
-        $this->render('registration');
+        $this->render('registration', array (
+            'model' => $model,
+        ));
     }
 }

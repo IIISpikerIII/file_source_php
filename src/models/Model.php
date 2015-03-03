@@ -4,6 +4,7 @@ abstract class Model {
 
     public $table;
     public $attributes = array();
+    public $errors = array();
 
     public function setAttributes($params = array()) {
 
@@ -16,6 +17,14 @@ abstract class Model {
 
     public function save() {
 
+        // validate model before save
+        $valid = $this->validate();
+        if($valid !== true) {
+
+            $this->errors = $valid;
+            return false;
+        }
+
         $attr = array();
         foreach($this->attributes as $key => $val) {
 
@@ -23,7 +32,8 @@ abstract class Model {
                 $attr[$key] = $this->$key;
         }
 
-        return Connect::db()->insert($this->table, $attr);
+
+        return (Connect::db()->insert($this->table, $attr) === 1)? true: false;
     }
 
     public function validate($attr = array()) {
@@ -37,10 +47,14 @@ abstract class Model {
             if(isset($val['valid']) && is_array($val['valid'])) {
 
                 // validators model
-                foreach($val['valid'] as $validator) {
+                foreach($val['valid'] as $id => $validator) {
 
-                    if($error = $this->validateAttribute($key, $validator) !== true)
-                        $err[] = $error;
+                    if(is_numeric($id))
+                        $error = $this->validateAttribute($key, $this->$key, $validator);
+                    else
+                        $error = $this->validateAttribute($key, $this->$key, $id, $validator);
+
+                    if($error !== true) $err[] = $error;
                 }
             }
         }
@@ -50,13 +64,13 @@ abstract class Model {
         return $err;
     }
 
-    public function validateAttribute($attr, $validator) {
+    public function validateAttribute($key, $val, $validator, $param = null) {
 
         $valid = new Validator();
         $answer = true;
 
         if(method_exists($valid, $validator))
-            $answer = $valid->$attr;
+            $answer = call_user_func_array(array($valid, $validator), array($key, $val, $param));
 
         return $answer;
     }

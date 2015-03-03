@@ -37,6 +37,7 @@
             <td><input name="User[b_date]" id="User_b_date" type="date" value="0000-00-00 00:00:00">                </td>
         </tr>
 
+        <?if(!empty($model->errors)) print_r($model->errors);?>
         <tr>
             <td><input type="submit" name="yt0" value=" Сохранить "></td>
         </tr>

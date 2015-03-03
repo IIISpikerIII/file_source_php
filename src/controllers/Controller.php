@@ -4,8 +4,8 @@ abstract class Controller {
 
     public function render($file, $params = array()) {
 
-        $tmpl= BASE_PATH.'/view/layout.php';
-        $file = BASE_PATH.'/view/'.$file.'.php';
+        $tmpl= BASE_PATH.'/views/layout.php';
+        $file = BASE_PATH.'/views/'.$file.'.php';
 
         $result = null;
 

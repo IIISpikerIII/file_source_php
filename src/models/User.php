@@ -15,11 +15,11 @@ class User extends Model {
     public $role;
 
     public $attributes = array(
-        'login'     => array('self'=>true),
+        'login'     => array('self'=>true, 'valid' => array('maxlength' => '3')),
         'pass'      => array('self'=>true),
         'f_name'    => array('self'=>true),
         's_name'    => array('self'=>true),
-        'email'     => array('self'=>true),
+        'email'     => array('self'=>true, 'valid' => array('email')),
         'phone'     => array('self'=>true),
         'b_date'    => array('self'=>true),
         'created',

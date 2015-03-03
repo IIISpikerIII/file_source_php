@@ -2,20 +2,29 @@
 
 class Validator {
 
-    public function email($attr){
+    public function email($attr, $val){
 
         $reg = '/.+@.+\..+/i';
 
-        if($this->validateReg($attr, $reg) === false) {
+        if($this->validateReg($val, $reg) === false && !empty($val))
             return $this->addError($attr, "Не верно введен email");
-        }
 
         return true;
     }
 
-    private function validateReg($attr, $reg){
+    public function maxlength($attr, $val,  $length){
 
-        if(preg_match($reg, $attr) === 1)
+        $leng = strlen($val);
+
+        if($leng > $length)
+            return $this->addError($attr, "Максимальное количество символов ".$length);
+
+        return true;
+    }
+
+    private function validateReg($val, $reg){
+
+        if(preg_match($reg, $val) === 1)
             return true;
 
         return false;
